@@ -1,0 +1,4 @@
+Again, you need to select the version of the compiler that you have, and define the
+appropriate value in Version.h. Loser and Browser support only THINK C 4.0 and 5.0,
+however, if you have an older version, you can probably figure out what changes to
+make here by looking at Generic App.
