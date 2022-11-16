@@ -20,6 +20,8 @@
 
 #include "Version.h"
 
+#include <Windows.h>
+
 #ifdef V5
 #include <Types.h>
 #else

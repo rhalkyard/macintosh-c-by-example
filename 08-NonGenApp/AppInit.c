@@ -17,6 +17,13 @@
 	==========================================================
 
    ***************************************************************************** */
+#include <Dialogs.h>
+#include <Fonts.h>
+#include <Menus.h>
+#include <Quickdraw.h>
+#include <TextEdit.h>
+#include <Windows.h>
+
 #include "AppGlobals.h"
 #include "MenuConstants.h"
 
@@ -36,8 +43,8 @@
 
 
 /* ----------------------------  Local Prototypes  ------------------------------- */
-Boolean			initMem 		( void );
-void			initMenus 		( void );
+static Boolean		initMem 		( void );
+static void			initMenus 		( void );
 
 /*----------------------------------------------------------------------------------------
 	initApp -	initialize the QD environment and the application state
@@ -48,7 +55,7 @@ initApplication ()
 {
 	short 		item;
 
-	InitGraf(&thePort);    /* initialize the managers */
+	InitGraf(&qd.thePort);    /* initialize the managers */
 	InitFonts ();
 	InitWindows();
 	InitCursor ();	
@@ -139,8 +146,8 @@ initMem ()
 	}
 
 	/* get screen dimensions */
-	resW = screenBits.bounds.right - screenBits.bounds.left;
-	resH = screenBits.bounds.bottom - screenBits.bounds.top;
+	resW = qd.screenBits.bounds.right - qd.screenBits.bounds.left;
+	resH = qd.screenBits.bounds.bottom - qd.screenBits.bounds.top;
 	menuBarHeight = GetMBarHeight();
 	
 	/*

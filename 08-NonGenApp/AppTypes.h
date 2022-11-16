@@ -19,6 +19,7 @@
    ***************************************************************************** */
 #ifndef _AppTypes_
 #define _AppTypes_
+#include <Windows.h>
 
 #include "Version.h"
 

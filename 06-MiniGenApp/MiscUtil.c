@@ -17,6 +17,11 @@
    ***************************************************************************** */
 #include "Version.h"
 
+#include <Dialogs.h>
+#include <Sound.h>
+
+#include "ThinkHelpers.h"
+
 #ifdef V5
 #include <stdio.h>
 #endif
@@ -69,13 +74,7 @@ newClearPtr (size)
 	thePtr = 0L;
 	if (size < freeMem)		/* if we want less than the largest block */
 	{
-		/* use "glue" to allocate the zeroed memory */
-		asm
-		{
-			move.l		size, d0
-			NewPtr  	CLEAR
-			move.l		a0, thePtr
-		}
+		thePtr = NewPtrClear(size);
 
 		if (err = MemError())	/* test for success */
 		{

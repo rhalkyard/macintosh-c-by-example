@@ -15,6 +15,10 @@
 	==========================================================
 
    ***************************************************************************** */
+#include <Dialogs.h>
+#include <Sound.h>
+#include <TextUtils.h>
+  
 #include "AppConstants.h"
 #include "StrRsrcDefs.h"
 
@@ -26,8 +30,8 @@
 
 /* ------------------------  Local Prototypes  --------------------------------- */
 
-void		getIOErrStr 		( StringPtr, short );
-short		fmErr2AppReason 	( OSErr );
+static void		getIOErrStr 		( StringPtr, short );
+static short	fmErr2AppReason 	( OSErr );
 
 
 /* -------------------------------------------------------------------------------

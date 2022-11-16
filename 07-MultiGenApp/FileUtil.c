@@ -16,13 +16,15 @@
 	==========================================================
 
    ***************************************************************************** */
+#include <Files.h>
+
 #include "AppConstants.h"
 
 #include "FileUtilPr.h"
 
 /* ------------------------  Local Prototypes  --------------------------------- */
 
-void	closeFile	( short, short );
+static void	closeFile	( short, short );
 
 /* ------------------------------------------------------------------------------------------
 	closeDocFile 	-	close the data file associated with a document

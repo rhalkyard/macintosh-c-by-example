@@ -15,6 +15,12 @@
 	==========================================================
 
    ***************************************************************************** */
+#include <Controls.h>
+#include <Quickdraw.h>
+#include <Windows.h>
+
+#include "ThinkHelpers.h"
+
 #include "AppGlobals.h"
 
 #include "WindowUtilPr.h"
@@ -25,8 +31,8 @@
 
 /* ------------------  Local Prototypes  ---------------------------- */
 
-void		moveScrollBars		( WindowPtr );
-void		setPortClip			( WindowPtr );
+static void		moveScrollBars		( WindowPtr );
+static void		setPortClip			( WindowPtr );
 
 /* ----------------------------------------------------------------------------
 	centerWindow -	calculate the left, top position of a centered window
@@ -43,8 +49,8 @@ centerWindow (theWindow)
 	/* get the window rect in global coordinates */
 	getWinRect (theWindow, &globalRect);
 	
-	scrLength = screenBits.bounds.right - screenBits.bounds.left;
-	scrHeight = (screenBits.bounds.bottom - screenBits.bounds.top) - GetMBarHeight();
+	scrLength = qd.screenBits.bounds.right - qd.screenBits.bounds.left;
+	scrHeight = (qd.screenBits.bounds.bottom - qd.screenBits.bounds.top) - GetMBarHeight();
 
 	/* get the screen size */
 	where.v = (scrHeight - (globalRect.bottom - globalRect.top)) >> 1;

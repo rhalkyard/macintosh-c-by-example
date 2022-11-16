@@ -20,6 +20,14 @@
    ***************************************************************************** */
 #include "Version.h"
 
+#include <Controls.h>
+#include <ControlDefinitions.h>
+#include <Devices.h>
+#include <Resources.h>
+#include <TextUtils.h>
+
+#include "ThinkHelpers.h"
+
 #ifdef V5
 #include <stdio.h>
 #endif
@@ -51,10 +59,10 @@
 
 /* ------------------------  Local Prototypes  --------------------------------- */
 
-DocPtr			createNewDoc		( DocParamsPtr );
-DocPtr			allocDoc			( void );
-void			disposeDocContents	( DocPtr );
-void			setDocMaxScroll		( DocPtr );
+static DocPtr		createNewDoc		( DocParamsPtr );
+static DocPtr		allocDoc			( void );
+static void			disposeDocContents	( DocPtr );
+static void			setDocMaxScroll		( DocPtr );
 
 /* -----------------------------------------------------------------------------
 	doNewDoc -		passed a docType token, create a document of that type

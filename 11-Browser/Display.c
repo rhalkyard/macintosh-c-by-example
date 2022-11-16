@@ -13,6 +13,7 @@
 	==========================================================
 
    ***************************************************************************** */
+#include <TextEdit.h>
 
 #include <ctype.h>
 #include <stdio.h>
@@ -26,9 +27,9 @@
 
 /* ----------------------------  Local Prototypes  -------------------------------- */
 
-void		drawByteIF			( DocPtr );
-void		printBrowserHdr		( DocPtr );
-void		drawDocText 		( DocPtr );
+static void		drawByteIF			( DocPtr );
+static void		printBrowserHdr		( DocPtr );
+static void		drawDocText 		( DocPtr );
 
 /*---------------------------------------------------------------------------------
 	drawDocContents -	draw the contents of theDoc based on document type

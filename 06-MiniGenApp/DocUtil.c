@@ -14,6 +14,10 @@
 	==========================================================
 
    ***************************************************************************** */
+#include <Controls.h>
+#include <Devices.h>
+#include <TextUtils.h>
+
 #include "AppGlobals.h"
 
 #include "FileUtilPr.h"
@@ -23,8 +27,8 @@
 
 
 /* ------------------------  Local Prototypes  --------------------------------- */
-DocPtr			createNewDoc		( DocParamsPtr );
-DocPtr			allocDoc			( void );
+static DocPtr		createNewDoc		( DocParamsPtr );
+static DocPtr		allocDoc			( void );
 
 /* -----------------------------------------------------------------------------
 	doNewDoc -		open a new window

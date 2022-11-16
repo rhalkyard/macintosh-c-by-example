@@ -19,6 +19,8 @@
 #ifndef _WindowUtilPr_
 #define _WindowUtilPr_
 
+#include <Controls.h>
+
 #if V2
 #include <ControlMgr.h>
 #endif

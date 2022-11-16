@@ -16,6 +16,7 @@
    ***************************************************************************** */
 #include <stdio.h>
 #include <string.h>
+#include <TextUtils.h>
 
 #include "BrowserGlobals.h"
 
@@ -33,7 +34,7 @@ static DocListHdl	sDocListHdl;		/* the table of open window refs */
 
 /* ------------------------  Local Prototypes  --------------------------------- */
 
-short		 	buildMenuItemStr 	( DocPtr, StringPtr, short );
+static short	 	buildMenuItemStr 	( DocPtr, StringPtr, short );
 
 /* -----------------------------------------------------------------------------------
 	doWindowMenu - 	window menu item routing function.

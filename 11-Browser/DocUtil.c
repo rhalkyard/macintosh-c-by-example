@@ -13,6 +13,12 @@
 	==========================================================
 
    ***************************************************************************** */
+#include <Controls.h>
+#include <ControlDefinitions.h>
+#include <Devices.h>
+#include <StandardFile.h>
+#include <TextEdit.h>
+
 #include <stdio.h>
 #if 0
 #include "HFS.h"
@@ -35,18 +41,18 @@
 static short sBrowserMode, sRsrcMode;
 
 /* ------------------------  Local Prototypes  --------------------------------- */
-DocPtr			createNewDoc		( DocParamsPtr );
-DocPtr			allocDoc			( void );
-void			disposeDocContents	( DocPtr );
+static DocPtr		createNewDoc		( DocParamsPtr );
+static DocPtr		allocDoc			( void );
+static void			disposeDocContents	( DocPtr );
 
-Boolean			initDocData			( DocPtr, DocParamsPtr );
-TEHandle		initDocText			( DocPtr );
-void			initScrollParams	( DocPtr, DocParamsPtr );
-void			setDocMaxScroll 	( DocPtr theDoc );
+static Boolean		initDocData			( DocPtr, DocParamsPtr );
+static TEHandle		initDocText			( DocPtr );
+static void			initScrollParams	( DocPtr, DocParamsPtr );
+static void			setDocMaxScroll 	( DocPtr theDoc );
 
-OSErr				doGetFile 			( DocParamsPtr );
-pascal int 			getFileDlgHook 		( short, DialogPtr );
-pascal uchar		getFileFilterProc 	( FileParam * );
+static OSErr			doGetFile 			( DocParamsPtr );
+static pascal short		getFileDlgHook 		( short, DialogPtr );
+static pascal uchar		getFileFilterProc 	( FileParam * );
 
 /* -----------------------------------------------------------------------------
 	doBinaryOpen -	respond to open menu selection
@@ -305,7 +311,7 @@ getFileFilterProc (paramBlkPtr)
 	getFileDlgHook - hook proc for the get file dialog
 	5.28.90kwgm
 ------------------------------------------------------------------------- */
-static  pascal int
+static  pascal short
 getFileDlgHook (item, dialogPtr)
 	short		item;
 	DialogPtr	dialogPtr;

@@ -13,6 +13,10 @@
 	==========================================================
 
    ***************************************************************************** */
+#include <ControlDefinitions.h>
+#include <Events.h>
+#include "ThinkHelpers.h"
+
 #include "BrowserGlobals.h"
 
 #include "BufMgrPr.h"
@@ -25,14 +29,14 @@
 
 /* ------------------  Local Prototypes  ---------------------------- */
 
-void		setPortClip			( WindowPtr );
-void		moveScrollBars		( WindowPtr );
-
-pascal void	scrollWinProc		( ControlHandle, short );
-void 		scrollDoc 			( DocPtr, ControlHandle, short, short );
-void 		scrollTextDoc 		( DocPtr, ControlHandle, short, short );
-void 		scrollBinDoc 		( DocPtr, ControlHandle, short, short );
-void 		scrollByThumb		( DocPtr, ControlHandle, short );
+static void			setPortClip			( WindowPtr );
+static void			moveScrollBars		( WindowPtr );
+ 
+static pascal void	scrollWinProc		( ControlHandle, short );
+static void 		scrollDoc 			( DocPtr, ControlHandle, short, short );
+static void 		scrollTextDoc 		( DocPtr, ControlHandle, short, short );
+static void 		scrollBinDoc 		( DocPtr, ControlHandle, short, short );
+static void 		scrollByThumb		( DocPtr, ControlHandle, short );
 
 	
 /* --------------------------------------------------------------------------
@@ -440,8 +444,8 @@ centerWindow (theWindow)
 	mBarHeight = GetMBarHeight ();
 
 	/* get the screen size */
-	scrLength = screenBits.bounds.right - screenBits.bounds.left;
-	scrHeight = (screenBits.bounds.bottom - screenBits.bounds.top) - mBarHeight;
+	scrLength = qd.screenBits.bounds.right - qd.screenBits.bounds.left;
+	scrHeight = (qd.screenBits.bounds.bottom - qd.screenBits.bounds.top) - mBarHeight;
 
 	where.v = (scrHeight - (globalRect.bottom - globalRect.top)) / 2 + mBarHeight;
 	where.h = (scrLength - (globalRect.right - globalRect.left)) / 2;

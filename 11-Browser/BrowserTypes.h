@@ -16,6 +16,8 @@
    ***************************************************************************** */
 #ifndef _BrowserTypes_
 #define _BrowserTypes_
+#include <TextEdit.h>
+#include <Windows.h>
 
 #include "Version.h"
 

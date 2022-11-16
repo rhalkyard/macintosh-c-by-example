@@ -13,6 +13,9 @@
 	==========================================================
 
    ***************************************************************************** */
+#include <Files.h>
+#include <Memory.h>
+
 #include "BrowserConstants.h"
 #include "StrRsrcDefs.h"
 
@@ -25,7 +28,7 @@
 #define kBufSize		256L
 
 
-Boolean		fillFileBuffer		( DocPtr, Size );
+static Boolean		fillFileBuffer		( DocPtr, Size );
 
 /* ----------------------------------------------------------------------
 	initFileBuffer - 	intialize a document's file buffer

@@ -19,6 +19,10 @@
    ***************************************************************************** */
 #define _Main_Module_
 
+#include <Controls.h>
+#include <Events.h>
+#include <Windows.h>
+
 #include "AppGlobals.h"
 
 #include "Version.h"
@@ -41,12 +45,12 @@
 	
 /* --------------------  Local Prototypes --------------------------------- */
 void					main					( void );
-void					doKeyDown 				( EventRecord *e );
-void					doMouseDown 			( EventRecord *e );
-void					doActivateEvent			( EventRecord *e );
-void					doUpdateEvent			( EventRecord *e );
-void					doSuspendResume			( EventRecord *e );
-void					doInContent 			( WindowPtr, EventRecord *e );
+static void				doKeyDown 				( EventRecord *e );
+static void				doMouseDown 			( EventRecord *e );
+static void				doActivateEvent			( EventRecord *e );
+static void				doUpdateEvent			( EventRecord *e );
+static void				doSuspendResume			( EventRecord *e );
+static void				doInContent 			( WindowPtr, EventRecord *e );
 /* -------------------------------------------------------------------------
 	main -	program entry point
 ---------------------------------------------------------------------------- */

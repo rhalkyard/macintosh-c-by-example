@@ -16,6 +16,10 @@
 
    ***************************************************************************** */
 
+#include <Windows.h>
+
+#include "ThinkHelpers.h"
+
 #include "WindowUtilPr.h"
 
 /* ----------------------------------------------------------------------------
@@ -34,8 +38,8 @@ centerWindow (theWindow)
 	getWinRect (theWindow, &globalRect);
 	
 	/* get the screen size */
-	scrLength = screenBits.bounds.right - screenBits.bounds.left;
-	scrHeight = (screenBits.bounds.bottom - screenBits.bounds.top) - GetMBarHeight();
+	scrLength = qd.screenBits.bounds.right - qd.screenBits.bounds.left;
+	scrHeight = (qd.screenBits.bounds.bottom - qd.screenBits.bounds.top) - GetMBarHeight();
 
 	where.v = (scrHeight - (globalRect.bottom - globalRect.top)) / 2;
 	where.h = (scrLength - (globalRect.right - globalRect.left)) / 2;

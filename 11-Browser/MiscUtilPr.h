@@ -16,6 +16,7 @@
 
 #ifndef _MiscUtilPr_
 #define _MiscUtilPr_
+#include <Events.h>
 
 Handle		newClearHdl		( Size );
 Ptr			newClearPtr		( Size );

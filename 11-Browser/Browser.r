@@ -1,3 +1,8 @@
+#define ALRT_RezTemplateVersion 0
+#define DLOG_RezTemplateVersion 0
+
+#include "Types.r"
+
 resource 'ALRT' (256, "No RAM") {
 	{46, 56, 134, 392},
 	256,
@@ -510,7 +515,7 @@ resource 'MENU' (2, "File") {
 	"File",
 	{	/* array: 5 elements */
 		/* [1] */
-		"Open", noIcon, hierarchicalMenu, "\r", plain,
+		"Open", noIcon, hierarchicalMenu, "\0x0a", plain,
 		/* [2] */
 		"-", noIcon, noKey, noMark, plain,
 		/* [3] */

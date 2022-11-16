@@ -17,7 +17,11 @@
 #include "BrowserGlobals.h"
 #include "MenuConstants.h"
 
+#include <Dialogs.h>
+#include <Menus.h>
+#include <Quickdraw.h>
 #include <TextEdit.h>
+#include <Windows.h>
 
 #include "AboutBoxPr.h"
 #include "DocUtilPr.h"
@@ -36,8 +40,8 @@
 
 
 /* ----------------------------  Local Prototypes  ------------------------------- */
-Boolean			initMem 		( void );
-void			initMenus 		( void );
+static Boolean			initMem 		( void );
+static void			initMenus 		( void );
 
 /*----------------------------------------------------------------------------------------
 	initApp -	initialize the QD environment and the application state
@@ -47,7 +51,7 @@ initApplication ()
 {
 	short 		item;
 
-	InitGraf(&thePort);    /* initialize the managers */
+	InitGraf(&qd.thePort);    /* initialize the managers */
 	InitFonts ();
 	InitWindows();
 	InitCursor ();	
@@ -76,7 +80,7 @@ initMem ()
 	register short 	i;
 	Size 			sz;
 	short 			resW, resH, menuBarHeight;
-	Boolean			resultCode;
+	OSErr			resultCode;
 	Rect			grayRgnBounds;
 	RgnHandle		grayRgnHdl;
 
@@ -112,8 +116,8 @@ initMem ()
 	}
 
 	/* get screen dimensions */
-	resW = screenBits.bounds.right - screenBits.bounds.left;
-	resH = screenBits.bounds.bottom - screenBits.bounds.top;
+	resW = qd.screenBits.bounds.right - qd.screenBits.bounds.left;
+	resH = qd.screenBits.bounds.bottom - qd.screenBits.bounds.top;
 	menuBarHeight = GetMBarHeight();
 	
 	/*

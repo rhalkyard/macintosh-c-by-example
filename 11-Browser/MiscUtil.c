@@ -14,6 +14,14 @@
 	====================================================================
 
    ***************************************************************************** */
+#include <Controls.h>
+#include <Dialogs.h>
+#include <Memory.h>
+#include <Sound.h>
+#include <TextUtils.h>
+
+#include "ThinkHelpers.h"
+
 #include <stdio.h>
 
 #include "BrowserGlobals.h"
@@ -44,13 +52,7 @@ newClearPtr (size)
 	
 		if (size < freeMem)		/* if request is less than largest block */
 		{
-			/* use "glue" to allocate the zeroed memory */
-			asm
-			{
-				move.l		size, d0
-				NewPtr  	CLEAR
-				move.l		a0, thePtr
-			}
+			thePtr = NewPtrClear(size);
 	
 			if (err = MemError())	/* test for success */
 			{
@@ -82,7 +84,7 @@ Handle
 newClearHdl (size)
 	Size			size;
 {
-	Ptr				theHandle;
+	Handle			theHandle;
 	Size			freeMem;
 	OSErr			err;
 	Str64			s;
@@ -93,13 +95,7 @@ newClearHdl (size)
 		freeMem = FreeMem ();	/* check free space */
 		if (size < freeMem)		/* if less than free space */
 		{
-			/* use "glue" to allocate the zeroed memory */
-			asm
-			{
-				move.l		size, d0
-				NewHandle	CLEAR
-				move.l		a0, theHandle
-			}
+			theHandle = NewHandleClear(size);
 	
 			if (err = MemError())	/* test for success */
 			{

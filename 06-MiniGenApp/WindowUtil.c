@@ -14,6 +14,9 @@
 	==========================================================
 
    ***************************************************************************** */
+#include "ThinkHelpers.h"
+
+#include <Windows.h>
 
 #include "WindowUtilPr.h"
 
@@ -33,8 +36,8 @@ centerWindow (theWindow)
 	getWinRect (theWindow, &globalRect);
 	
 	/* get the screen size */
-	scrLength = screenBits.bounds.right - screenBits.bounds.left;
-	scrHeight = (screenBits.bounds.bottom - screenBits.bounds.top) - GetMBarHeight();
+	scrLength = qd.screenBits.bounds.right - qd.screenBits.bounds.left;
+	scrHeight = (qd.screenBits.bounds.bottom - qd.screenBits.bounds.top) - GetMBarHeight();
 
 	/* get the point which centers the window */
 	where.v = (scrHeight - (globalRect.bottom - globalRect.top)) / 2;
@@ -72,6 +75,7 @@ getWinRect (theWindow, globalRect)
 	LocalToGlobal (&(botRight(*globalRect)));	/* convert bottom-right */
 	
 #if 0
+/*
 		these two lines of code need explaination:
 		
 		the macros topLeft and botRight are defined in MacTypes.h
@@ -104,7 +108,7 @@ getWinRect (theWindow, globalRect)
 		
 		Can you now appreciate why sometimes, and I underline the word 'sometimes',
 		writing terse code is preferable?
-		
+*/
 #endif
 	
 	SetPort (savePort);

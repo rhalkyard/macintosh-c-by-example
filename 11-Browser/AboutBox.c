@@ -16,6 +16,13 @@
    ***************************************************************************** */
 #include <stdio.h>
 
+#include <Dialogs.h>
+#include <Events.h>
+#include <Sound.h>
+#include <TextUtils.h>
+
+#include "ThinkHelpers.h"
+
 #include "BrowserConstants.h"
 #include "StrRsrcDefs.h"
 
@@ -26,7 +33,7 @@
 
 /* ---------------------------  Local Prototypes  ----------------------------- */
 
-DialogPtr	drawAboutBox ( Boolean );
+static DialogPtr	drawAboutBox ( Boolean );
 
 /* ----------------------------------------------------------------------------
 	doAboutBox -	put up about box, wait for user to go away
@@ -131,7 +138,7 @@ drawAboutBox (doMemSize)
 		CtoPstr (memStr);
 	
 		/* draw string as white on black */
-		PenPat (white);
+		PenPat (&qd.white);
 		TextFont (1);		/* 12 pt 'appfont' (usually geneva) */
 		TextSize (12);
 		TextMode (srcBic);	/* need this mode to draw white on blcak */

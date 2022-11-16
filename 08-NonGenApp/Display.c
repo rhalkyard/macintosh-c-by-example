@@ -24,8 +24,8 @@
 
 /* ----------------------------  Local Prototypes  -------------------------------- */
 
-void		drawDocPICT		( DocPtr );
-void		drawDocText		( DocPtr );
+static void		drawDocPICT		( DocPtr );
+static void		drawDocText		( DocPtr );
 
 /*---------------------------------------------------------------------------------
 	drawDocContents -	draw the contents of theDoc based on document type

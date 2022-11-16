@@ -19,7 +19,7 @@
 #define _BrowserConstants_
 
 #define		NIL					0L
-#define		kNulPascalStr		"\p"
+#define		kNulPascalStr		""
 
 /* 
 	define MAX and MIN as macros, if not already defined 

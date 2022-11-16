@@ -14,6 +14,8 @@
 	==========================================================
 
    ***************************************************************************** */
+#include <Dialogs.h>
+
 #include "BrowserConstants.h"
 #include "BrowserGlobals.h"
 
@@ -57,7 +59,7 @@ sepLineProc (theDialog, theItem)		/* draw gray line */
 	
 	GetDItem (theDialog, theItem, &type, &itemHdl, &box);
 	
-	PenPat (gray);
+	PenPat (&qd.gray);
 	MoveTo (box.left, box.top);
 	LineTo (box.right, box.top);
 	PenNormal ();

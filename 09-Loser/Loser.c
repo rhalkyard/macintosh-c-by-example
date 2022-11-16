@@ -16,6 +16,9 @@
    ***************************************************************************** */
 #define _Main_Module_
 
+#include <StandardFile.h>
+#include <TextUtils.h>
+
 #include "AppConstants.h"
 #include "AppGlobals.h"
 #include "StrRsrcDefs.h"
@@ -35,11 +38,11 @@ static	Boolean			sSFProcFirst, sLoseMode;
 
 
 /* -------------------------------  Local Prototypes  ----------------------- */
-int					main					( void );
-Boolean				doLoser					( void );
-OSErr				doLoserGetFile 			( DocParamsPtr );
-pascal int 			loserGetFileDlgHook 	( short, DialogPtr );
-pascal pBoolean		loserGetFileFilterProc 	( FileParam * );
+int						main					( void );
+static Boolean			doLoser					( void );
+static OSErr			doLoserGetFile 			( DocParamsPtr );
+static pascal short		loserGetFileDlgHook 	( short, DialogPtr );
+static pascal pBoolean	loserGetFileFilterProc 	( FileParam * );
 
 /* -------------------------------------------------------------------------
 	main -		program entry point
@@ -47,7 +50,7 @@ pascal pBoolean		loserGetFileFilterProc 	( FileParam * );
 ---------------------------------------------------------------------------- */
 main ()
 {
-	InitGraf (&thePort);    /* initialize the managers */
+	InitGraf (&qd.thePort);    /* initialize the managers */
 	InitFonts ();
 	InitWindows();
 	InitCursor ();	
@@ -58,8 +61,8 @@ main ()
 
 	/*  global screen size */
 	SetRect (&gScreenRect, kScreenBorder, GetMBarHeight() + kScreenBorder, 
-		(screenBits.bounds.right - screenBits.bounds.left) - kScreenBorder, 
-		(screenBits.bounds.bottom - screenBits.bounds.top) - kScreenBorder);
+		(qd.screenBits.bounds.right - qd.screenBits.bounds.left) - kScreenBorder, 
+		(qd.screenBits.bounds.bottom - qd.screenBits.bounds.top) - kScreenBorder);
 
 	gDevel = false;			/* we are in development */
 	
@@ -186,7 +189,7 @@ loserGetFileFilterProc (paramBlkPtr)
 	loserGetFileDlgHook - hook proc for the get file dialog
 	5.28.90kwgm
 ------------------------------------------------------------------------- */
-static  pascal int
+static  pascal short
 loserGetFileDlgHook (item, dialogPtr)
 	short		item;
 	DialogPtr	dialogPtr;

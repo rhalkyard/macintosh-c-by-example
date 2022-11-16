@@ -16,6 +16,7 @@
 #ifndef _WindowUtilPr_
 #define _WindowUtilPr_
 
+#include <Controls.h>
 #include "BrowserTypes.h"
 
 

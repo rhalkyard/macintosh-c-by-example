@@ -17,6 +17,13 @@
 	==========================================================
 
    ***************************************************************************** */
+#include <Controls.h>
+#include <ControlDefinitions.h>
+#include <Quickdraw.h>
+#include <Windows.h>
+
+#include "ThinkHelpers.h"
+
 #include "AppGlobals.h"
 
 /* ### kwgm 5.17.90 */
@@ -30,13 +37,13 @@
 
 /* ------------------  Local Prototypes  ---------------------------- */
 
-void		moveScrollBars		( WindowPtr );
-void		setPortClip			( WindowPtr );
+static void		moveScrollBars		( WindowPtr );
+static void		setPortClip			( WindowPtr );
 
 /* ### kwgm 5.17.90 */
-pascal void	scrollWinProc		( ControlHandle, short );
-void 		scrollDoc 			( DocPtr, ControlHandle, short, short );
-void 		scrollByThumb		( DocPtr, ControlHandle, short );
+static pascal void	scrollWinProc		( ControlHandle, short );
+static void 		scrollDoc 			( DocPtr, ControlHandle, short, short );
+static void 		scrollByThumb		( DocPtr, ControlHandle, short );
 /* ### kwgm 5.17.90 */
 
 
@@ -478,9 +485,9 @@ centerWindow (theWindow)
 /* ### kwgm 5.17.90 */
 
 	/* get the screen size */
-	scrLength = screenBits.bounds.right - screenBits.bounds.left;
+	scrLength = qd.screenBits.bounds.right - qd.screenBits.bounds.left;
 /* ### kwgm 5.17.90 */
-	scrHeight = (screenBits.bounds.bottom - screenBits.bounds.top) - mBarHeight;
+	scrHeight = (qd.screenBits.bounds.bottom - qd.screenBits.bounds.top) - mBarHeight;
 
 	where.v = (scrHeight - (globalRect.bottom - globalRect.top)) / 2 + mBarHeight;
 /* ### kwgm 5.17.90 */

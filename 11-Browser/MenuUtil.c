@@ -14,6 +14,10 @@
 	==========================================================
 
    ***************************************************************************** */
+#include <Devices.h>
+#include <Windows.h>
+#include "ThinkHelpers.h"
+
 #include "BrowserGlobals.h"
 #include "MenuConstants.h"
 
@@ -26,9 +30,9 @@
 #include "MenuUtilPr.h"
 
 /* ------------------------------------------------------------------------ */
-void			doAppleMenu			( short );
-void			doFileMenu			( short );
-void			doEditMenu			( short );
+static void			doAppleMenu			( short );
+static void			doFileMenu			( short );
+static void			doEditMenu			( short );
 
 
 /* -----------------------------------------------------------------------------

@@ -22,7 +22,7 @@
 
 /* ------------------------  Local Prototypes  --------------------------------- */
 
-void			closeFile			( short, short );
+static void		closeFile			( short, short );
 
 /* ------------------------------------------------------------------------------------------
 	closeDocFile 	-	close the data file associated with a document

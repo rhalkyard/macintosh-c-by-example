@@ -20,6 +20,8 @@
 #ifndef _WindowUtilPr_
 #define _WindowUtilPr_
 
+#include <Controls.h>
+
 #ifdef V2
 #include <ControlMgr.h>
 #endif

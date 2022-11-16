@@ -1,3 +1,8 @@
+#define ALRT_RezTemplateVersion 0
+#define DLOG_RezTemplateVersion 0
+
+#include "Types.r"
+
 resource 'ALRT' (256, "No RAM") {
 	{46, 56, 134, 392},
 	256,

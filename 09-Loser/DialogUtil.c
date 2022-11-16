@@ -15,6 +15,7 @@
 	==========================================================
 
    ***************************************************************************** */
+#include <Dialogs.h>
 
 #include "AppConstants.h"
 #include "AppGlobals.h"
@@ -81,7 +82,7 @@ sepLineProc (theDialog, theItem)		/* draw gray line */
 	
 	if (type & kUserType)
 	{
-		PenPat (gray);
+		PenPat (&qd.gray);
 		MoveTo (box.left, box.top);
 		LineTo (box.right, box.top);
 		PenNormal ();

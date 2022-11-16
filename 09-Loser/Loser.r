@@ -1,3 +1,8 @@
+#define ALRT_RezTemplateVersion 0
+#define DLOG_RezTemplateVersion 0
+
+#include "Types.r"
+
 resource 'DITL' (1000, "pError") {
 	{	/* array DITLarray: 9 elements */
 		/* [1] */

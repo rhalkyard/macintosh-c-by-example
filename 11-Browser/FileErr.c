@@ -14,6 +14,11 @@
 	==========================================================
 
    ***************************************************************************** */
+#include <Dialogs.h>
+#include <Files.h>
+#include <Sound.h>
+#include <TextUtils.h>
+
 #include "BrowserConstants.h"
 #include "StrRsrcDefs.h"
 
@@ -26,8 +31,8 @@
 
 /* ------------------------  Local Prototypes  --------------------------------- */
 
-void	getIOErrStr 		( StringPtr, OSErr );
-short	fmErr2AppReason 	( OSErr );
+static void		getIOErrStr 		( StringPtr, OSErr );
+static short	fmErr2AppReason 	( OSErr );
 
 /* -------------------------------------------------------------------------------
 	doFileCantAlert -	put up the can't open/close/read advisory
@@ -172,6 +177,7 @@ fmErr2AppReason (err)
 			reason = err;
 			break;
 	}
+	return reason;
 	
 } /* fmErr2AppReason */
 

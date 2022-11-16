@@ -15,6 +15,11 @@
 	==========================================================
 
    ***************************************************************************** */
+#include <Devices.h>
+#include <Menus.h>
+
+#include "ThinkHelpers.h"
+
 #include "AppGlobals.h"
 #include "MenuConstants.h"
 
@@ -26,9 +31,9 @@
 #include "MenuUtilPr.h"
 
 /* ---------------------  Local Prototypes  -------------------------------- */
-void			doAppleMenu			( short );
-void			doFileMenu			( short );
-void			doEditMenu			( short );
+static void			doAppleMenu			( short );
+static void			doFileMenu			( short );
+static void			doEditMenu			( short );
 
 /* -----------------------------------------------------------------------------
 	doMenu -		determine what item in which menu was selected.

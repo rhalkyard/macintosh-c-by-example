@@ -27,7 +27,12 @@
 		3) Bring the project up to date.
 
    ***************************************************************************** */
+#include <Events.h>
+#include <OSUtils.h>
 #include <Quickdraw.h>
+#include <Sound.h>
+#include <Windows.h>
+
 #define		kHelloString		"\pHey, mac!"
 
 /* ------------------------- Local Prototypes ---------------------------------- */
@@ -67,7 +72,7 @@ main ()
 void
 initTheMac ()
 {
-	InitGraf (&thePort);
+	InitGraf (&qd.thePort);
 	InitWindows();
 	InitFonts ();
 	InitCursor ();

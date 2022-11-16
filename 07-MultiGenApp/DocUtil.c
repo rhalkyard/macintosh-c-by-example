@@ -18,6 +18,13 @@
 /* ### 4.24.90kwgm - added for multiGeneric */
 #include "Version.h"
 
+#include <Controls.h>
+#include <ControlDefinitions.h>
+#include <Devices.h>
+#include <TextUtils.h>
+
+#include "ThinkHelpers.h"
+
 #ifdef V5
 #include <stdio.h>
 #endif
@@ -51,8 +58,8 @@
 
 /* ------------------------  Local Prototypes  --------------------------------- */
 
-DocPtr			createNewDoc		( DocParamsPtr );
-DocPtr			allocDoc			( void );
+static DocPtr			createNewDoc		( DocParamsPtr );
+static DocPtr			allocDoc			( void );
 
 /* -----------------------------------------------------------------------------
 	doNewDoc -		open a new window
@@ -94,7 +101,7 @@ doCloseDoc (theDoc)
 	WindowPtr		theDoc;
 {
 	ControlHandle		control;
-	Boolean				result;
+	OSErr				result;
 	WindowPtr			topWin;
 
     result = false;
