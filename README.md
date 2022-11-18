@@ -74,6 +74,7 @@ From the root of this repository:
 ```bash
 RETRO68_HOME=$HOME/Retro68-build # or wherever you installed Retro68 to
 mkdir build
+cd build
 cmake .. -DCMAKE_TOOLCHAIN_FILE=$RETRO68_HOME/toolchain/m68k-apple-macos/cmake/retro68.toolchain.cmake
 make
 ```
