@@ -58,7 +58,7 @@ main ()
 		
 		getMouseDown ();
 		
-		DisposWindow (theWindow);
+		DisposeWindow (theWindow);
 	}
 	
 	ExitToShell ();
