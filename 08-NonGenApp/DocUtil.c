@@ -99,7 +99,7 @@ doNewDoc (docType)
 	if (theDoc = createNewDoc (&docParams))
 		result = true;
 	
-	makeFrameRect (theDoc, &frameRect);
+	makeFrameRect ((WindowPtr) theDoc, &frameRect);
 
 	if (docType == kDocPICT)
 	{
@@ -115,7 +115,7 @@ doNewDoc (docType)
 		}
 		else
 		{
-			theDoc->contentHdl = picHdl;	/* assign handle to doc */
+			theDoc->contentHdl = (Handle) picHdl;	/* assign handle to doc */
 			 
 			/* set up document scroll variables (see MacUser July 1990) */
 			extent = (*picHdl)->picFrame;
@@ -143,7 +143,7 @@ doNewDoc (docType)
 		}
 		else
 		{
-			SetPort (theDoc);
+			SetPort ((WindowPtr) theDoc);
 
 			/* set text attributes */
 			TextFont (1);		/* app font */
@@ -166,7 +166,7 @@ doNewDoc (docType)
 				TESetText (*dataHdl, GetHandleSize (dataHdl), docText);
 				HUnlock (dataHdl);
 				
-				theDoc->contentHdl = docText;	/* assign TEHdl to document */
+				theDoc->contentHdl = (Handle) docText;	/* assign TEHdl to document */
 							
 				GetFontInfo (&fInfo);		/* get font metrics */
 				
@@ -210,20 +210,20 @@ doCloseDoc (theDoc)
     
 	if (((WindowPeek) theDoc)->windowKind  < 1)    /* desk accessory */
  		CloseDeskAcc (((WindowPeek) theDoc)->windowKind);
- 	else if ((result = closeDocFile (theDoc)) != kSaveChangeCancel)
+ 	else if ((result = closeDocFile ((DocPtr) theDoc)) != kSaveChangeCancel)
  	{
-      	while (control = ((WindowPeek)theDoc)->controlList)
+      	while (control = (ControlHandle) ((WindowPeek)theDoc)->controlList)
       		DisposeControl (control);
 		
-		CloseWindow ((WindowPtr) theDoc);
+		CloseWindow (theDoc);
 
 		gNumOpenDocs--;		/* decrement the global open window counter */
 		
 /* ### kwgm 5.17.90 */
-		disposeDocContents (theDoc);
+		disposeDocContents ((DocPtr) theDoc);
 /* ### kwgm 5.17.90 */
 
-		DisposPtr (theDoc);
+		DisposPtr ((Ptr) theDoc);
 		result = true;
 	}
 	else
@@ -265,16 +265,16 @@ createNewDoc (docParams)
 	}
 	
 	/* create new document structure */
-	if (theDoc = NewWindow (theDoc, &newWinRect, "\p", false, 
+	if (theDoc = (DocPtr) NewWindow (theDoc, &newWinRect, "\p", false, 
 		documentProc + 8, (WindowPtr)-1L, true, 0L))
 	{
 		/* add scroll bars to the window */
-		hScrollBarRect (theDoc, &scrollBarRect);
-		NewControl (theDoc, &scrollBarRect, 0L, 
+		hScrollBarRect ((WindowPtr) theDoc, &scrollBarRect);
+		NewControl ((WindowPtr) theDoc, &scrollBarRect, 0L, 
 			false, 0, 0, kControlMax, scrollBarProc, kHScrollTag);
 
-		vScrollBarRect (theDoc, &scrollBarRect);
-		NewControl (theDoc, &scrollBarRect, 0L, 
+		vScrollBarRect ((WindowPtr) theDoc, &scrollBarRect);
+		NewControl ((WindowPtr) theDoc, &scrollBarRect, 0L, 
 			false, 0, 0, kControlMax, scrollBarProc, kVScrollTag);
 	
 		if (!docParams->fileParams.fileName[0])
@@ -290,7 +290,7 @@ createNewDoc (docParams)
 				(Size)(docParams->fileParams.fileName + 1));
 			
 		/* initialize document data */
-		SetWTitle (theDoc, title);
+		SetWTitle ((WindowPtr) theDoc, title);
 	
 		theDoc->maxScroll.h = theDoc->maxScroll.v = kControlMax;
 		
@@ -301,10 +301,10 @@ createNewDoc (docParams)
 			
 		gNumOpenDocs++;
 		
-		ShowWindow (theDoc);
-		SelectWindow (theDoc);	
+		ShowWindow ((WindowPtr) theDoc);
+		SelectWindow ((WindowPtr) theDoc);	
 
-		SetPort (theDoc);
+		SetPort ((WindowPtr) theDoc);
 	}
 	
 	return (theDoc);
@@ -324,7 +324,7 @@ allocDoc ()
 	newDoc = 0L;
 	
 	if (gNumOpenDocs < kMaxOpenDocs)
-		newDoc = newClearPtr ((Size)sizeof (Doc));
+		newDoc = (DocPtr) newClearPtr ((Size)sizeof (Doc));
 
 	return (newDoc);
 		
@@ -344,12 +344,12 @@ closeAllDocs ()
 	result = true;
 	while (gNumOpenDocs > 0)		/* loop on all open windows */
 	{
-		if (theDoc = FrontWindow ())	
+		if (theDoc = (DocPtr) FrontWindow ())	
 		{
 			if (ISDIRTY(theDoc))
-				SelectWindow (theDoc);	/* bring to front and hilight */
+				SelectWindow ((WindowPtr) theDoc);	/* bring to front and hilight */
 			
-			if (doCloseDoc (theDoc) == kSaveChangeCancel)
+			if (doCloseDoc ((WindowPtr) theDoc) == kSaveChangeCancel)
 			{
 				result = false;		/* user canceled */
 				break;
@@ -376,7 +376,7 @@ disposeDocContents (theDoc)
 		if (ISPICTDOC (theDoc))
 			ReleaseResource (contentHdl);
 		else
-			TEDispose (contentHdl);
+			TEDispose ((TEHandle) contentHdl);
 
 		theDoc->contentHdl = 0L;
 	}
@@ -397,8 +397,8 @@ resizeDocContents (theDoc)
 	
 	if (ISTEXTDOC (theDoc))		/* text doc */
 	{
-		makeFrameRect (theDoc, &frameRect);
-		docText = theDoc->contentHdl;
+		makeFrameRect ((WindowPtr) theDoc, &frameRect);
+		docText = (TEHandle) theDoc->contentHdl;
 		
 		/* adjust h extent */
 		theDoc->docExtent.h = frameRect.right - frameRect.left;
@@ -434,7 +434,7 @@ setDocMaxScroll (theDoc)
 {
 	Rect		frameRect;
 	
-	makeFrameRect (theDoc, &frameRect);
+	makeFrameRect ((WindowPtr) theDoc, &frameRect);
 	
 	theDoc->maxScroll.h = theDoc->docExtent.h - (frameRect.right - frameRect.left);
 	theDoc->maxScroll.v = theDoc->docExtent.v - (frameRect.bottom - frameRect.top);

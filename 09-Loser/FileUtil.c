@@ -61,7 +61,7 @@ doFileCantAlert (fileName, whatOp, reason, infoStr)
 	{
 		SysBeep (1);
 		GetDItem (theDialog, kOutlineButtonID, &itemType, &buttonHdl, &box);
-		SetDItem (theDialog, kOutlineButtonID, itemType, buttonProc, &box);
+		SetDItem (theDialog, kOutlineButtonID, itemType, (Handle) buttonProc, &box);
 		
 		getIOErrStr (errStr, reason);
 		ParamText (whatStr, fileName, errStr, infoStr);

@@ -225,7 +225,7 @@ doActivateEvent (e)
 	HidePen();
 
 	/* activate or deactivate all window controls */
-	controlList =  ((WindowPeek)theWindow)->controlList;
+	controlList = (ControlHandle) ((WindowPeek)theWindow)->controlList;
 	if (e->modifiers & activeFlag)
 	{
 		while (controlList)
@@ -276,12 +276,12 @@ doUpdateEvent (e)
 		SetPort (theWindow);
 		BeginUpdate (theWindow);
 		
-		EraseRgn ((WindowPeek)theWindow->visRgn);
+		EraseRgn ((RgnHandle) (WindowPeek)theWindow->visRgn);
 
 /* ### kwgm 4.24.90 - addition to May 1990 version */
-		drawScrollBars (theWindow, true);				
+		drawScrollBars ((DocPtr) theWindow, true);				
 /* ### kwgm 4.24.90  */
-		drawDocContents (theWindow);
+		drawDocContents ((DocPtr) theWindow);
 		
 		EndUpdate (theWindow);
 		SetPort (savePort);

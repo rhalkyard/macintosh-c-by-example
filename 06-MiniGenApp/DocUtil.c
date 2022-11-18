@@ -83,14 +83,14 @@ doCloseDoc (theDoc)
  	else if ((result = closeDocFile ((DocPtr)theDoc)) != kSaveChangeCancel)
  	{
  		/* dispose each control associated with the window */
-      	while (control = ((WindowPeek)theDoc)->controlList)
+      	while (control = (ControlHandle) ((WindowPeek)theDoc)->controlList)
       		DisposeControl (control);
 		
 		/* Have the Window Manager close the window */
 		CloseWindow ((WindowPtr) theDoc);
 
 		/* because we allocated the storage for the document, dispose the pointer */
-		DisposPtr (theDoc);
+		DisposPtr ((Ptr) theDoc);
 		result = true;
 	}
 	else
@@ -117,11 +117,11 @@ createNewDoc (params)
 	GetIndString (title, kNameStrRsrc, kWindowTitleStrID);
 	
 	/* create the associated window */
-	if (theDoc = NewWindow ((WindowPtr)theDoc, &gWindowRect, title, false, rDocProc, (WindowPtr)-1L, true, 0L))
+	if (theDoc = (DocPtr) NewWindow ((WindowPtr)theDoc, &gWindowRect, title, false, rDocProc, (WindowPtr)-1L, true, 0L))
 	{
-		ShowWindow (theDoc);
-		SelectWindow (theDoc);
-		SetPort (theDoc);
+		ShowWindow ((WindowPtr) theDoc);
+		SelectWindow ((WindowPtr) theDoc);
+		SetPort ((WindowPtr) theDoc);
 	}
 
 	return (theDoc);
@@ -137,7 +137,7 @@ allocDoc ()
 {
 	DocPtr		newDoc;
 		
-	return (newDoc = newClearPtr ((Size)sizeof (Doc)));
+	return (newDoc = (DocPtr) newClearPtr ((Size)sizeof (Doc)));
 		
 } /* allocDoc */
 

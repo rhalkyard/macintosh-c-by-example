@@ -142,7 +142,7 @@ fixMenus ()
 {
 	DocPtr		theDoc;
 	
-	if (theDoc = FrontWindow())		/* if there's an open document */
+	if (theDoc = (DocPtr) FrontWindow())		/* if there's an open document */
 	{
 		EnableItem (gFileMenu, kCloseItem);		/* enable the close item */
 		

@@ -23,7 +23,7 @@
 void		centerWindow		( WindowPtr );
 Rect *		getWinRect 			( WindowPtr, Rect * );
 Rect *		calcNewWinRect		( Rect * );
-Rect *		makeFrameRect		( WindowPtr, Rect * );
+void		makeFrameRect		( WindowPtr, Rect * );
 void		setFrameClip		( WindowPtr, Rect * );
 
 Rect *		hScrollBarRect		( WindowPtr, Rect * );

@@ -37,7 +37,7 @@ drawDocContents (theDoc)
 {
 	Rect			frameRect;
 	
-	setFrameClip (theDoc, &frameRect);
+	setFrameClip ((WindowPtr) theDoc, &frameRect);
 	
 	if (ISPICTDOC(theDoc))		/* see AppConstants.h for macro definition of ISPICTDOC */
 		drawDocPICT (theDoc);
@@ -63,7 +63,7 @@ drawDocPICT (theDoc)
 	OffsetRect (&picRect, -(theDoc->curScroll.h - 1), -(theDoc->curScroll.v - 1));
 	
 	/* draw the PICT in the offset rectangle */
-	DrawPicture (theDoc->contentHdl, &picRect);
+	DrawPicture ((PicHandle) theDoc->contentHdl, &picRect);
 
 } /* drawDocPICT */
 
@@ -78,7 +78,7 @@ drawDocText (theDoc)
 	TEHandle		docTextHdl;
 	Rect			viewRect, destRect;
 	
-	if (docTextHdl = theDoc->contentHdl)
+	if (docTextHdl = (TEHandle) theDoc->contentHdl)
 	{
 		/*
 			This is the technique (one of them) for scrolling a TE document:

@@ -202,12 +202,12 @@ void
 clickZoomWindow (theWindow)
 	WindowPtr		theWindow;
 {
-	long  			newSize;
-	WStateData		**wDataHdl;
-	Rect			userState, portRect;
+	long  				newSize;
+	WStateDataHandle	wDataHdl;
+	Rect				userState, portRect;
 
 	/* See IM-IV for WStateData description */
-	wDataHdl = ((WindowPeek)theWindow)->dataHandle;
+	wDataHdl = (WStateDataHandle) ((WindowPeek)theWindow)->dataHandle;
 	userState = (*wDataHdl)->userState;
 	portRect = theWindow->portRect;
 	
@@ -240,15 +240,15 @@ drawScrollBars (theDoc, activate)
 	Point			curScroll, maxScroll, docExtent, frameSize;
 	Rect			frameRect;
 	
-	setPortClip (theDoc);		/* clip out to port */
-	DrawGrowIcon (theDoc);
+	setPortClip ((WindowPtr) theDoc);		/* clip out to port */
+	DrawGrowIcon ((WindowPtr) theDoc);
 	
-	theControl = ((WindowPeek)theDoc)->controlList;
+	theControl = (ControlHandle) ((WindowPeek)theDoc)->controlList;
 	
-	if ((theDoc == FrontWindow ()) && activate)
+	if ((theDoc == (DocPtr) FrontWindow ()) && activate)
 	{
 		/* get frame size */
-		makeFrameRect (theDoc, &frameRect);
+		makeFrameRect ((WindowPtr) theDoc, &frameRect);
 		frameSize.h = frameRect.right - frameRect.left;
 		frameSize.v = frameRect.bottom - frameRect.top;
 		
@@ -295,7 +295,7 @@ drawScrollBars (theDoc, activate)
 		}
 	}
 
-	DrawControls (theDoc);
+	DrawControls ((WindowPtr) theDoc);
 
 } /* drawScrollBars */
 /* ### 4.24.90 kwgm - new routine for multiGeneric */
@@ -315,7 +315,7 @@ moveScrollBars (theWindow)
 	
 	setPortClip (theWindow);
 	
-	controlList = ((WindowPeek)theWindow)->controlList;
+	controlList = (ControlHandle) ((WindowPeek)theWindow)->controlList;
 	portRect = theWindow->portRect;
 	
 	while (controlList)		/* move each control */

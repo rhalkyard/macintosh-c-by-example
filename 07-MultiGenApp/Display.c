@@ -83,10 +83,10 @@ drawDocContents (theDoc)
 	Rect			frameRect;
 	Str255			aStr;
 	
-	setFrameClip (theDoc, &frameRect);		/* set clip to frame area */
+	setFrameClip ((WindowPtr) theDoc, &frameRect);		/* set clip to frame area */
 	
 	GetFontInfo (&fInfo);			/* get font information */
-	GetWTitle (theDoc, aStr);		/* get window title */
+	GetWTitle ((WindowPtr) theDoc, aStr);		/* get window title */
 	
 	len = height = 0;
 	lineHeight = fInfo.ascent + fInfo.descent + fInfo.leading;	/* from font info */

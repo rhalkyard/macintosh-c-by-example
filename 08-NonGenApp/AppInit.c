@@ -106,7 +106,7 @@ initMem ()
 	register short 	i;
 	Size 			sz;
 	short 			resW, resH, menuBarHeight;
-	Boolean			resultCode;
+	OSErr			resultCode;
 	Rect			grayRgnBounds;
 	RgnHandle		grayRgnHdl;
 

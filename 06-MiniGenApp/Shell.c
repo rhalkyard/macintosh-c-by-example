@@ -186,7 +186,7 @@ doActEvent (e)
 	theWindow = (WindowPtr) e->message;
 	SetPort (theWindow);
 	
-	controlList =  ((WindowPeek)theWindow)->controlList;
+	controlList =  (ControlHandle) ((WindowPeek)theWindow)->controlList;
 	
 	HidePen();
 	if (e->modifiers & activeFlag)
@@ -230,9 +230,9 @@ doUpdateEvent (e)
 		SetPort (theWindow);
 		BeginUpdate (theWindow);
 		
-		EraseRgn ((WindowPeek)theWindow->visRgn);
+		EraseRgn ((RgnHandle) (WindowPeek)theWindow->visRgn);
 		
-		drawDocContents (theWindow);
+		drawDocContents ((DocPtr) theWindow);
 		
 		EndUpdate (theWindow);
 		SetPort (savePort);
@@ -300,9 +300,9 @@ cleanExit (normal)
 {
 	WindowPeek		theWindow;
 	
-	if (theWindow = FrontWindow ())
+	if (theWindow = (WindowPeek) FrontWindow ())
 		if (theWindow->windowKind > 1)
-			doCloseDoc (theWindow);
+			doCloseDoc ((WindowPtr) theWindow);
 			
 	ExitToShell ();
 }

@@ -24,7 +24,7 @@
 	makeFrameRect -	create the window frame rectangle, ie, the content - scroll bar
 	3.30.90kwgm		areas
 ----------------------------------------------------------------------------------- */
-Rect *
+void
 makeFrameRect (theWindow, frameRectPtr)
 	WindowPtr	theWindow;
 	Rect		*frameRectPtr;
@@ -38,8 +38,6 @@ makeFrameRect (theWindow, frameRectPtr)
 	
 	if (frameRectPtr)
 		*frameRectPtr = localRect;
-
-	return (&localRect);
 	
 } /* makeFrameRect */
 

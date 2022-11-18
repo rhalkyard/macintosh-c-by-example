@@ -126,7 +126,7 @@ doGrowWindow (theWindow, aPt)
 	invalScrollBars (theWindow, true);	/* erase and invalidate new scroll bar area */
 	
 /* ### kwgm 5.17.90 */
-	resizeDocContents (theWindow);		/* notify the document of the change */
+	resizeDocContents ((DocPtr) theWindow);		/* notify the document of the change */
 /* ### kwgm 5.17.90 */
 
 } /* doGrowWindow */
@@ -152,7 +152,7 @@ doZoomBox (theWindow, partCode)
 	InvalRect (&theWindow->portRect);
 
 /* ### kwgm 5.17.90 */
-	resizeDocContents (theWindow);		/* notify the document of the change */
+	resizeDocContents ((DocPtr) theWindow);		/* notify the document of the change */
 /* ### kwgm 5.17.90 */
 
 	SetPort (savePort);
@@ -167,12 +167,12 @@ void
 clickZoomWindow (theWindow)
 	WindowPtr		theWindow;
 {
-	long  			newSize;
-	WStateData		**wDataHdl;
-	Rect			userState, portRect;
+	long  				newSize;
+	WStateDataHandle	wDataHdl;
+	Rect				userState, portRect;
 
 	/* See IM-IV for WStateData description */
-	wDataHdl = ((WindowPeek)theWindow)->dataHandle;
+	wDataHdl = (WStateDataHandle) ((WindowPeek)theWindow)->dataHandle;
 	userState = (*wDataHdl)->userState;
 	portRect = theWindow->portRect;
 	
@@ -206,16 +206,16 @@ drawScrollBars (theDoc, activate)
 	if (!theDoc)
 		return;
 		
-	setPortClip (theDoc);		/* clip out to port */
-	DrawGrowIcon (theDoc);
+	setPortClip ((WindowPtr) theDoc);		/* clip out to port */
+	DrawGrowIcon ((WindowPtr) theDoc);
 	
 	/* get head of control list */
-	theControl = ((WindowPeek)theDoc)->controlList;
+	theControl = (ControlHandle) ((WindowPeek)theDoc)->controlList;
 	
-	if ((theDoc == FrontWindow ()) && activate)
+	if ((theDoc == (DocPtr) FrontWindow ()) && activate)
 	{
 		/* get frame size */
-		makeFrameRect (theDoc, &frameRect);
+		makeFrameRect ((WindowPtr) theDoc, &frameRect);
 		frameSize.h = frameRect.right - frameRect.left;
 		frameSize.v = frameRect.bottom - frameRect.top;
 		
@@ -272,7 +272,7 @@ drawScrollBars (theDoc, activate)
 		}
 	}
 
-	DrawControls (theDoc);		/* Draw all controls in the window */
+	DrawControls ((WindowPtr) theDoc);		/* Draw all controls in the window */
 
 } /* drawScrollBars */
 
@@ -290,7 +290,7 @@ moveScrollBars (theWindow)
 	
 	setPortClip (theWindow);
 	
-	controlList = ((WindowPeek)theWindow)->controlList;
+	controlList = (ControlHandle) ((WindowPeek)theWindow)->controlList;
 	portRect = theWindow->portRect;
 	
 	while (controlList)		/* move each control */
@@ -426,7 +426,7 @@ setPortClip (theWin)
 	makeFrameRect -	create the window frame rectangle, ie, the content - scroll bar
 	4.24.90kwgm		areas
 ----------------------------------------------------------------------------------- */
-Rect *
+void
 makeFrameRect (theWindow, frameRectPtr)
 	WindowPtr	theWindow;
 	Rect		*frameRectPtr;
@@ -440,8 +440,6 @@ makeFrameRect (theWindow, frameRectPtr)
 	
 	if (frameRectPtr)
 		*frameRectPtr = localRect;
-
-	return (&localRect);
 	
 } /* makeFrameRect */
 
@@ -514,7 +512,7 @@ mouseInScroll (theDoc, theControl, partCode, where)
 	Rect			frameRect;
 	short			oldThumb, newThumb, scrollValue;
 	
-	setPortClip (theDoc);
+	setPortClip ((WindowPtr) theDoc);
 	switch (partCode) 
 	{
 		case inUpButton:
@@ -525,7 +523,7 @@ mouseInScroll (theDoc, theControl, partCode, where)
 		case inPageUp:
 		case inPageDown:
 			/* scroll by an amount the size of the current doc frame */
-			makeFrameRect (theDoc, &frameRect);
+			makeFrameRect ((WindowPtr) theDoc, &frameRect);
 			
 			/* scale the scroll by the document's scroll value */
 			if (GetCRefCon (theControl) == kHScrollTag)
@@ -577,7 +575,7 @@ scrollDoc (theDoc, theControl, partCode, value)
 	/* we loop here while the mouse stays down */
 	do
 	{
-		setFrameClip (theDoc, &frameRect);	/* clip to doc contents */
+		setFrameClip ((WindowPtr) theDoc, &frameRect);	/* clip to doc contents */
 	
 		switch (partCode)
 		{
@@ -626,14 +624,14 @@ scrollDoc (theDoc, theControl, partCode, value)
 		{
 			InvalRgn (updateRgn);
 			
-			BeginUpdate (theDoc);
+			BeginUpdate ((WindowPtr) theDoc);
 			drawDocContents (theDoc);	/* note: mini update process */
-			EndUpdate (theDoc);
+			EndUpdate ((WindowPtr) theDoc);
 			
 			SetRectRgn (updateRgn, 0, 0, 0, 0);		/* clear out region */
 		}
 	
-		setPortClip (theDoc);	/* widen clip to include scrollbars */
+		setPortClip ((WindowPtr) theDoc);	/* widen clip to include scrollbars */
 	
 		/* adjust scroll bar appearance */
 		SetCtlValue (theControl, hScroll ? theDoc->curScroll.h : theDoc->curScroll.v);
@@ -691,7 +689,7 @@ scrollWinProc (theControl, partCode)
 	ControlHandle		theControl;
 	short				partCode;
 {
-	scrollDoc ((*theControl)->contrlOwner, theControl, partCode, 1);
+	scrollDoc ((DocPtr) (*theControl)->contrlOwner, theControl, partCode, 1);
 }
 
 /* ===============================  EOF  =======================================

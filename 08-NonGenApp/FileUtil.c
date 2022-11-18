@@ -37,7 +37,7 @@ closeDocFile (theDoc)
 	register DocPtr 	theDoc;
 {	
 	if (!theDoc)
-		return;
+		return false;
 
 	closeFile (theDoc->volRefNum, theDoc->openFileRefNum);
 	

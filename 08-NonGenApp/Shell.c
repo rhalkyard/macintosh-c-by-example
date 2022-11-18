@@ -219,7 +219,7 @@ doActivateEvent (e)
 	{
 		SetPort (theWindow);
 		
-		controlList =  ((WindowPeek)theWindow)->controlList;
+		controlList = (ControlHandle) ((WindowPeek)theWindow)->controlList;
 		
 		HidePen();
 		if (e->modifiers & activeFlag)
@@ -267,10 +267,10 @@ doUpdateEvent (e)
 		SetPort (theWindow);
 		BeginUpdate (theWindow);
 		
-		EraseRgn ((WindowPeek)theWindow->visRgn);
+		EraseRgn ((RgnHandle) (WindowPeek)theWindow->visRgn);
 
-		drawScrollBars (theWindow, true);				
-		drawDocContents (theWindow);
+		drawScrollBars ((DocPtr) theWindow, true);				
+		drawDocContents ((DocPtr) theWindow);
 		
 		EndUpdate (theWindow);
 		SetPort (savePort);
@@ -301,7 +301,7 @@ doInContent (theWindow, eventPtr)
 	GlobalToLocal (&where);
 		
 	if (part = FindControl (where, theWindow, &theControl))		/* in control? */
-		mouseInScroll (theWindow, theControl, part, where);
+		mouseInScroll ((DocPtr) theWindow, theControl, part, where);
 
 	SetPort (savePort);		/* restore port */
 
@@ -338,7 +338,7 @@ doSuspendResume (e)
 			HiliteWindow (topWindow, false);
 
 /* ### kwgm 5.17.90 - scroll bars are activated/deactivated with the document */
-		drawScrollBars (topWindow, activate);
+		drawScrollBars ((DocPtr) topWindow, activate);
 /* ### kwgm 5.17.90 */
 	}
 

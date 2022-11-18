@@ -146,7 +146,7 @@ drawAboutBox (doMemSize)
 		SetPort (theDialog);	/* set this dialog as the current grafport */
 
 		/* memBox : where to draw string */
-		GetDItem (theDialog, kAboutMemBox, &itemType, &cntlHdl, &memBox);
+		GetDItem (theDialog, kAboutMemBox, &itemType, (Handle *) &cntlHdl, &memBox);
 		
 		/* get the printf format string */
 		GetIndString (formatStr, kNameStrRsrc, kAboutBoxMsgStr);

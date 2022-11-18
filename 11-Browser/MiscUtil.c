@@ -271,8 +271,8 @@ pDebugStr  (string)
 		return (false);
 	
 	/* hilite the default button */
-	GetDItem (theDialog, kDebugMsgOKOutline, &type, &itemHdl, &box);
-	SetDItem (theDialog, kDebugMsgOKOutline, type, buttonProc, &box);
+	GetDItem (theDialog, kDebugMsgOKOutline, &type, (Handle *) &itemHdl, &box);
+	SetDItem (theDialog, kDebugMsgOKOutline, type, (Handle) buttonProc, &box);
 
 	ParamText (0L, string, 0L, 0L);		/* set up to write the error string */
 

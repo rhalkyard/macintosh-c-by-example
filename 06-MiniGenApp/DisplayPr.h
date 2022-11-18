@@ -20,7 +20,7 @@
 
 #include "AppTypes.h"
 
-Rect *		makeFrameRect		( WindowPtr, Rect * );
+void		makeFrameRect		( WindowPtr, Rect * );
 void		setFrameClip		( WindowPtr, Rect * );
 
 void		drawDocContents		( DocPtr );

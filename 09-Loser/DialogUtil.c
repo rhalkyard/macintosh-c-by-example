@@ -16,6 +16,8 @@
 
    ***************************************************************************** */
 #include <Dialogs.h>
+#include <Sound.h>
+#include <TextUtils.h>
 
 #include "AppConstants.h"
 #include "AppGlobals.h"
@@ -123,7 +125,7 @@ DLOGfilterProc1 (theDialog, theEvent, theItem)
 	short			*theItem;
 {
 	short			type;
-	Handle			item;
+	ControlHandle	item;
 	Rect			box;
 	char			c;
 	long			endTicks;
@@ -133,7 +135,7 @@ DLOGfilterProc1 (theDialog, theEvent, theItem)
 	
 	if (c == 13 || c == 3)		/* return or enter */
 	{
-		GetDItem (theDialog, kSetButtonID, &type, &item, &box);
+		GetDItem (theDialog, kSetButtonID, &type, (Handle *) &item, &box);
 		if (type == (ctrlItem | btnCtrl))
 		{
 			HiliteControl (item, true);
@@ -146,7 +148,7 @@ DLOGfilterProc1 (theDialog, theEvent, theItem)
 	}
 	else if (c == '.' && theEvent->modifiers & cmdKey)
 	{
-		GetDItem (theDialog, kCancelButtonID, &type, &item, &box);
+		GetDItem (theDialog, kCancelButtonID, &type, (Handle *) &item, &box);
 		if (type == (ctrlItem | btnCtrl))
 		{
 			HiliteControl (item, true);
@@ -190,7 +192,7 @@ doNumAlert (stringNo)
 		SysBeep (1);
 
 		GetDItem (theDialog, kOutlineButtonID, &itemType, &buttonHdl, &box);
-		SetDItem (theDialog, kOutlineButtonID, itemType, buttonProc, &box);
+		SetDItem (theDialog, kOutlineButtonID, itemType, (Handle) buttonProc, &box);
 
 		ParamText (errorStr, kNulPascalStr, kNulPascalStr, kNulPascalStr);
 		centerWindow (theDialog);

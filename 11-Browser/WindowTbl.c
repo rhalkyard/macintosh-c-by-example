@@ -18,6 +18,8 @@
 #include <string.h>
 #include <TextUtils.h>
 
+#include "ThinkHelpers.h"
+
 #include "BrowserGlobals.h"
 
 #include "DocUtilPr.h"
@@ -26,7 +28,7 @@
 
 /* -------------------------- Global Prototypes  ---------------------------- */
 
-#define	kSubstChar		0x255
+#define	kSubstChar		255
 
 static ushort	sWindowKeyTbl;		/* defines which slots are taken (for cmd 1-9) */
 
@@ -50,8 +52,8 @@ doWindowMenu (theItem)
 	{
 		theDoc = (*sDocListHdl)->docInfo [theItem - 1].theDoc;
 
-		if (theDoc != FrontWindow ())
-			SelectWindow (theDoc);			
+		if (theDoc != (DocPtr) FrontWindow ())
+			SelectWindow ((WindowPtr) theDoc);			
 	}
 	
 } /* doWindowMenu */
@@ -101,7 +103,7 @@ closeAllDocs ()
 	count = (*sDocListHdl)->count;
 	while ((count--) > 0)
 		if (theDoc = (*sDocListHdl)->docInfo [count].theDoc)	
-			doCloseDoc (theDoc);
+			doCloseDoc ((WindowPtr) theDoc);
 		
 	return (result);
 	
@@ -170,7 +172,7 @@ removeFromDocList (theDoc)
 	
 	/* now fit the memory to the size of the list */
 	newHdlSize = sizeof (DocList) + (listCount - 1) * sizeof (DocInfo);
-	if (resizeHdl (sDocListHdl, newHdlSize))
+	if (resizeHdl ((Handle) sDocListHdl, newHdlSize))
 		return;
 		
 } /* removeFromDocList */
@@ -212,7 +214,7 @@ addToDocList (theDoc)
 	index = (*sDocListHdl)->count++;
 
 	newHdlSize = sizeof (DocList) + index * sizeof (DocInfo);
-	if (resizeHdl (sDocListHdl, newHdlSize))
+	if (resizeHdl ((Handle) sDocListHdl, newHdlSize))
 		return;
 	
 	docInfo.slotNumber = bit <= 9 ? bit : 10;		/* docTable */
@@ -233,7 +235,7 @@ addToDocList (theDoc)
 void 
 initDocList ()
 {
-	sDocListHdl = newClearHdl ((Size) sizeof (short));			
+	sDocListHdl = (DocListHdl) newClearHdl ((Size) sizeof (short));			
 } /* initDocList */
 
 /* -------------------------------------------------------------------
@@ -250,7 +252,7 @@ menuSelectDoc (theItem)
 	
 	if ((*sDocListHdl)->count > 0)
 	{
-		theDoc = (*sDocListHdl)->docInfo [theItem - 1].theDoc;
+		theDoc = (WindowPtr) (*sDocListHdl)->docInfo [theItem - 1].theDoc;
 	
 		if (theDoc != topWindow)
 			SelectWindow (theDoc);

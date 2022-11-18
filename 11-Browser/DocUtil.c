@@ -16,6 +16,7 @@
 #include <Controls.h>
 #include <ControlDefinitions.h>
 #include <Devices.h>
+#include <Dialogs.h>
 #include <StandardFile.h>
 #include <TextEdit.h>
 
@@ -52,7 +53,7 @@ static void			setDocMaxScroll 	( DocPtr theDoc );
 
 static OSErr			doGetFile 			( DocParamsPtr );
 static pascal short		getFileDlgHook 		( short, DialogPtr );
-static pascal uchar		getFileFilterProc 	( FileParam * );
+static pascal uchar		getFileFilterProc 	( ParmBlkPtr );
 
 /* -----------------------------------------------------------------------------
 	doBinaryOpen -	respond to open menu selection
@@ -81,7 +82,7 @@ doOpenMenu (short theItem)
 		if (theDoc = createNewDoc (&docParams))
 		{
 			if (!initDocData (theDoc, &docParams))
-				doCloseDoc (theDoc);
+				doCloseDoc ((WindowPtr) theDoc);
 		}		
 	}
 
@@ -134,7 +135,7 @@ initScrollParams (DocPtr theDoc, DocParamsPtr docParamsPtr)
 	{
 		docText = theDoc->textHdl;
 		
-		makeFrameRect (theDoc, &frameRect);
+		makeFrameRect ((WindowPtr) theDoc, &frameRect);
 		GetFontInfo (&fInfo);
 	
 		/* setup scroll data */
@@ -144,7 +145,7 @@ initScrollParams (DocPtr theDoc, DocParamsPtr docParamsPtr)
 		theDoc->scrollVal.h = fInfo.widMax;
 		theDoc->scrollVal.v = (*docText)->lineHeight;
 	}
-	controlHdl = ((WindowPeek)theDoc)->controlList;
+	controlHdl = (ControlHandle) ((WindowPeek)theDoc)->controlList;
 	while (controlHdl)
 	{
 		SetCtlMax (controlHdl, theDoc->maxScroll.v);
@@ -165,10 +166,10 @@ initDocText (theDoc)
 	Rect		frameRect;
 	Str255		strBuf;
 	
-	makeFrameRect (theDoc, &frameRect);
+	makeFrameRect ((WindowPtr) theDoc, &frameRect);
 
 	/* setup the port with proper defaults */
-	SetPort (theDoc);
+	SetPort ((WindowPtr) theDoc);
 	TextFont (theDoc->textFont);
 	TextFace (theDoc->textFace);
 	TextSize (theDoc->textSize);
@@ -217,7 +218,7 @@ doOpenFile (docParamsPtr, openDocPtr)
 		/* is this document already open ? */	
 		if (*openDocPtr = findOpenDoc (docParamsPtr))
 		{
-			SelectWindow (*openDocPtr);	/* document already on desk - bring to top */
+			SelectWindow ((WindowPtr) *openDocPtr);	/* document already on desk - bring to top */
 			result = -1;
 		}
 		else
@@ -284,7 +285,7 @@ doGetFile (docParamsPtr)
 ------------------------------------------------------------------------- */
 static  pascal uchar
 getFileFilterProc (paramBlkPtr)
-	FileParam	* paramBlkPtr;
+	ParmBlkPtr paramBlkPtr;
 {
 	uchar		showit;
 
@@ -296,12 +297,12 @@ getFileFilterProc (paramBlkPtr)
 			It's all in the FileParam structure.
 		*/
 		if (sRsrcMode)
-			showit = (paramBlkPtr->ioFlRLgLen) ? false : true;	/* resource fork size */
+			showit = (paramBlkPtr->fileParam.ioFlRLgLen) ? false : true;	/* resource fork size */
 		else
-			showit = (paramBlkPtr->ioFlLgLen) ? false : true;	/* data fork size */
+			showit = (paramBlkPtr->fileParam.ioFlLgLen) ? false : true;	/* data fork size */
 	}
 	else	/* text mode */
-		showit = paramBlkPtr->ioFlLgLen ? false : true;		/* no zero length data forks */
+		showit = paramBlkPtr->fileParam.ioFlLgLen ? false : true;		/* no zero length data forks */
 
 	return (showit);
 	
@@ -322,19 +323,19 @@ getFileDlgHook (item, dialogPtr)
 
 	if (sBrowserMode == kBinaryMode)
 	{
-		GetDItem (dialogPtr, kBRsrcButton, &itemType, &rsrcButton, &box);
-		GetDItem (dialogPtr, kBDataButton, &itemType, &dataButton, &box);
+		GetDItem (dialogPtr, kBRsrcButton, &itemType, (Handle *) &rsrcButton, &box);
+		GetDItem (dialogPtr, kBDataButton, &itemType, (Handle *) &dataButton, &box);
 	}
 
 	switch (item)
 	{	
 		case -1:	/* initialization as per Apple */
 			/* install graphics items for auto-refresh */
-			GetDItem (dialogPtr, kGetFileSepLine, &itemType, &tempControlHdl, &box);
-			SetDItem (dialogPtr, kGetFileSepLine, itemType, sepLineProc, &box);
+			GetDItem (dialogPtr, kGetFileSepLine, &itemType, (Handle *) &tempControlHdl, &box);
+			SetDItem (dialogPtr, kGetFileSepLine, itemType, (Handle) sepLineProc, &box);
 
-			GetDItem (dialogPtr, kGetFileOutline, &itemType, &tempControlHdl, &box);
-			SetDItem (dialogPtr, kGetFileOutline, itemType, buttonProc, &box);
+			GetDItem (dialogPtr, kGetFileOutline, &itemType, (Handle *) &tempControlHdl, &box);
+			SetDItem (dialogPtr, kGetFileOutline, itemType, (Handle) buttonProc, &box);
 			
 			if (sBrowserMode == kBinaryMode)
 			{
@@ -402,16 +403,16 @@ doCloseDoc (theDoc)
  		CloseDeskAcc (((WindowPeek) theDoc)->windowKind);
  	else
  	{
-      	while (control = ((WindowPeek)theDoc)->controlList)
+      	while (control = (ControlHandle) ((WindowPeek)theDoc)->controlList)
       		DisposeControl (control);
 		
 		CloseWindow ((WindowPtr) theDoc);
 	
-		removeFromDocList (theDoc);
+		removeFromDocList ((DocPtr) theDoc);
 		
-		closeDocFile (theDoc);
-		disposeDocContents (theDoc);
-		DisposPtr (theDoc);
+		closeDocFile ((DocPtr) theDoc);
+		disposeDocContents ((DocPtr) theDoc);
+		DisposPtr ((Ptr) theDoc);
 	
 		gNumOpenDocs--;		/* decrement the global open window counter */
 		result = true;
@@ -459,17 +460,17 @@ createNewDoc (docParams)
 		windowProc = noGrowDocProc;
 	}
 	
-	if (theDoc = NewWindow (theDoc, &newWinRect, "\p", false, 
+	if (theDoc = (DocPtr) NewWindow (theDoc, &newWinRect, "\p", false, 
 		windowProc, (WindowPtr)-1L, true, 0L))
 	{
-		vScrollBarRect (theDoc, &scrollBarRect);
-		NewControl (theDoc, &scrollBarRect, 0L, 
+		vScrollBarRect ((WindowPtr) theDoc, &scrollBarRect);
+		NewControl ((WindowPtr) theDoc, &scrollBarRect, 0L, 
 			false, 0, 0, kControlMax, scrollBarProc, kVScrollTag);
 	
 		if (docParams->attributes & kTextMode)
 		{
-			hScrollBarRect (theDoc, &scrollBarRect);
-			NewControl (theDoc, &scrollBarRect, 0L, 
+			hScrollBarRect ((WindowPtr) theDoc, &scrollBarRect);
+			NewControl ((WindowPtr) theDoc, &scrollBarRect, 0L, 
 				false, 0, 0, kControlMax, scrollBarProc, kHScrollTag);
 		}
 
@@ -477,15 +478,15 @@ createNewDoc (docParams)
 		BlockMove (docParams->fileParams.fileName, title, 
 				(Size)(docParams->fileParams.fileName [0] + 1));
 		BlockMove (title, theDoc->fileName, (Size) (title [0] + 1));
-		SetWTitle (theDoc, title);
+		SetWTitle ((WindowPtr) theDoc, title);
 			
 		gNumOpenDocs++;
 		addToDocList (theDoc);
 		
-		ShowWindow (theDoc);
-		SelectWindow (theDoc);	
+		ShowWindow ((WindowPtr) theDoc);
+		SelectWindow ((WindowPtr) theDoc);	
 
-		SetPort (theDoc);			
+		SetPort ((WindowPtr) theDoc);			
 	}
 	
 	return (theDoc);
@@ -505,7 +506,7 @@ allocDoc ()
 	newDoc = 0L;
 	
 	if (gNumOpenDocs < kMaxOpenDocs)
-		newDoc = newClearPtr ((Size)sizeof (Doc));
+		newDoc = (DocPtr) newClearPtr ((Size)sizeof (Doc));
 
 	return (newDoc);
 		
@@ -523,7 +524,7 @@ resizeTextDocContents (theDoc)
 	Rect		frameRect;
 	TEHandle	docText;
 	
-	makeFrameRect (theDoc, &frameRect);
+	makeFrameRect ((WindowPtr) theDoc, &frameRect);
 	docText = theDoc->textHdl;
 	
 	/* adjust h extent */
@@ -558,7 +559,7 @@ setDocMaxScroll (DocPtr theDoc)
 {
 	Rect		frameRect;
 	
-	makeFrameRect (theDoc, &frameRect);
+	makeFrameRect ((WindowPtr) theDoc, &frameRect);
 	
 	theDoc->maxScroll.h = theDoc->docExtent.h - (frameRect.right - frameRect.left);
 	theDoc->maxScroll.v = theDoc->docExtent.v - (frameRect.bottom - frameRect.top);

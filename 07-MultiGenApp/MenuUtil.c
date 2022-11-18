@@ -132,7 +132,7 @@ doEditMenu (theItem)
 void
 fixMenus ()
 {
-	DocPtr		theDoc;
+	WindowPtr		theDoc;
 	
 	theDoc = FrontWindow();
 	

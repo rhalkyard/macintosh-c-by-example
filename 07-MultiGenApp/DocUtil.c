@@ -111,10 +111,10 @@ doCloseDoc (theDoc)
     
 	if (((WindowPeek) theDoc)->windowKind  < 1)    /* desk accessory */
  		CloseDeskAcc (((WindowPeek) theDoc)->windowKind);
- 	else if ((result = closeDocFile (theDoc)) != kSaveChangeCancel)  /* close the file,  */
- 	{																 /* then dispose of  */
- 																	 /* the window stuff */
-      	while (control = ((WindowPeek)theDoc)->controlList)
+ 	else if ((result = closeDocFile ((DocPtr) theDoc)) != kSaveChangeCancel) /* close the file,  */
+			{																 /* then dispose of  */
+																			 /* the window stuff */
+      	while (control = (ControlHandle) ((WindowPeek)theDoc)->controlList)
       		DisposeControl (control);
 		
 		CloseWindow ((WindowPtr) theDoc);
@@ -123,7 +123,7 @@ doCloseDoc (theDoc)
 		gNumOpenDocs--;		/* decrement the global open window counter */
 /* ### 4.24.90kwgm - added for multiGeneric */
 	
-		DisposPtr (theDoc);
+		DisposPtr ((Ptr) theDoc);
 		result = true;
 	}
 	else
@@ -173,16 +173,16 @@ createNewDoc (docParams)
 	}
 	
 	/* create new document structure */
-	if (theDoc = NewWindow (theDoc, &newWinRect, "\p", false, 
+	if (theDoc = (DocPtr) NewWindow ((WindowPtr) theDoc, &newWinRect, "\p", false, 
 		documentProc + 8, (WindowPtr)-1L, true, 0L))
 	{
 		/* add scroll bars to the window */
-		hScrollBarRect (theDoc, &scrollBarRect);
-		NewControl (theDoc, &scrollBarRect, 0L, 
+		hScrollBarRect ((WindowPtr) theDoc, &scrollBarRect);
+		NewControl ((WindowPtr) theDoc, &scrollBarRect, 0L, 
 			false, 0, 0, kControlMax, scrollBarProc, kHScrollTag);
 
-		vScrollBarRect (theDoc, &scrollBarRect);
-		NewControl (theDoc, &scrollBarRect, 0L, 
+		vScrollBarRect ((WindowPtr) theDoc, &scrollBarRect);
+		NewControl ((WindowPtr) theDoc, &scrollBarRect, 0L, 
 			false, 0, 0, kControlMax, scrollBarProc, kVScrollTag);
 	
 		if (!docParams->fileParams.fileName[0])
@@ -198,7 +198,7 @@ createNewDoc (docParams)
 				(Size)(docParams->fileParams.fileName + 1));
 			
 		/* initialize window data */
-		SetWTitle (theDoc, title);
+		SetWTitle ((WindowPtr) theDoc, title);
 	
 		theDoc->maxScroll.h = theDoc->maxScroll.v = kControlMax;
 		
@@ -209,10 +209,10 @@ createNewDoc (docParams)
 		gNumOpenDocs++;		/* bump open doc counter */
 /* ### 4.24.90kwgm - added for multiGeneric */
 
-		ShowWindow (theDoc);
-		SelectWindow (theDoc);	
+		ShowWindow ((WindowPtr) theDoc);
+		SelectWindow ((WindowPtr) theDoc);	
 
-		SetPort (theDoc);
+		SetPort ((WindowPtr) theDoc);
 	}
 	
 	return (theDoc);
@@ -237,7 +237,7 @@ allocDoc ()
 	newDoc = 0L;
 	
 	if (gNumOpenDocs < kMaxOpenDocs)
-		newDoc = newClearPtr ((Size)sizeof (Doc));
+		newDoc = (DocPtr) newClearPtr ((Size)sizeof (Doc));
 /* ### 4.24.90kwgm - added for multiGeneric */
 
 	return (newDoc);
@@ -259,12 +259,12 @@ closeAllDocs ()
 	result = true;
 	while (gNumOpenDocs > 0)		/* loop on all open windows */
 	{
-		if (theDoc = FrontWindow ())	
+		if (theDoc = (DocPtr) FrontWindow ())	
 		{
 			if (ISDIRTY(theDoc))
-				SelectWindow (theDoc);	/* bring to front and hilight */
+				SelectWindow ((WindowPtr) theDoc);	/* bring to front and hilight */
 			
-			if (doCloseDoc (theDoc) == kSaveChangeCancel)
+			if (doCloseDoc ((WindowPtr) theDoc) == kSaveChangeCancel)
 			{
 				result = false;		/* user canceled */
 				break;

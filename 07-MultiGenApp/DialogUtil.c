@@ -61,14 +61,14 @@ DLOGfilterProc1 (theDialog, theEvent, theItem)
 	char			c;
 	long			endTicks;
 	Boolean			result;
-	Handle			item;
+	ControlHandle	item;
 	
 	c = (theEvent->message & charCodeMask);
 	
 	if (c == 13 || c == 3)		/* return or enter */
 	{
 		/* get the item data from the DialogMgr */
-		GetDItem (theDialog, kSetButtonID, &type, &item, &box);
+		GetDItem (theDialog, kSetButtonID, &type, (Handle *) &item, &box);
 		if (type == (ctrlItem | btnCtrl))
 		{
 			HiliteControl (item, true);		/* flash the button push */
@@ -81,7 +81,7 @@ DLOGfilterProc1 (theDialog, theEvent, theItem)
 	}
 	else if (c == '.' && theEvent->modifiers & cmdKey)	/* cmd . */
 	{
-		GetDItem (theDialog, kCancelButtonID, &type, &item, &box);
+		GetDItem (theDialog, kCancelButtonID, &type, (Handle *) &item, &box);
 		if (type == (ctrlItem | btnCtrl))
 		{
 			HiliteControl (item, true);

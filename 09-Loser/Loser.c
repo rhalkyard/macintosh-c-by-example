@@ -42,13 +42,13 @@ int						main					( void );
 static Boolean			doLoser					( void );
 static OSErr			doLoserGetFile 			( DocParamsPtr );
 static pascal short		loserGetFileDlgHook 	( short, DialogPtr );
-static pascal pBoolean	loserGetFileFilterProc 	( FileParam * );
+static pascal pBoolean	loserGetFileFilterProc 	( ParmBlkPtr );
 
 /* -------------------------------------------------------------------------
 	main -		program entry point
 	5.28.90kwgm
 ---------------------------------------------------------------------------- */
-main ()
+int main ()
 {
 	InitGraf (&qd.thePort);    /* initialize the managers */
 	InitFonts ();
@@ -169,12 +169,12 @@ doLoserGetFile (docParamsPtr)
 ------------------------------------------------------------------------- */
 static  pascal pBoolean
 loserGetFileFilterProc (paramBlkPtr)
-	FileParam	* paramBlkPtr;
+	ParmBlkPtr		paramBlkPtr;
 {
 	Boolean			invis; 
 	pBoolean		result;
 
-	invis = (paramBlkPtr->ioFlFndrInfo.fdFlags & fInvisible) ? true : false;
+	invis = (paramBlkPtr->fileParam.ioFlFndrInfo.fdFlags & fInvisible) ? true : false;
 
 	if (sLoseMode)		/* in lose mode, show visible files */
 		result = invis;
@@ -199,18 +199,18 @@ loserGetFileDlgHook (item, dialogPtr)
 	ControlHandle		loseButton, findButton, tempControlHdl, okButton;
 	Boolean				changed;
 
-	GetDItem (dialogPtr, kLoserLoseButton, &itemType, &loseButton, &box);
-	GetDItem (dialogPtr, kLoserFindButton, &itemType, &findButton, &box);
-	GetDItem (dialogPtr, getOpen, &itemType, &okButton, &box);
+	GetDItem (dialogPtr, kLoserLoseButton, &itemType, (Handle *) &loseButton, &box);
+	GetDItem (dialogPtr, kLoserFindButton, &itemType, (Handle *) &findButton, &box);
+	GetDItem (dialogPtr, getOpen, &itemType, (Handle *) &okButton, &box);
 
 	if (sSFProcFirst)		/* initialize the dialog */
 	{
 		/* install graphics items for auto-refresh */
-		GetDItem (dialogPtr, kGetFileSepLine, &itemType, &tempControlHdl, &box);
-		SetDItem (dialogPtr, kGetFileSepLine, itemType, sepLineProc, &box);
+		GetDItem (dialogPtr, kGetFileSepLine, &itemType, (Handle *) &tempControlHdl, &box);
+		SetDItem (dialogPtr, kGetFileSepLine, itemType, (Handle) sepLineProc, &box);
 
-		GetDItem (dialogPtr, kGetFileOutlineButton, &itemType, &tempControlHdl, &box);
-		SetDItem (dialogPtr, kGetFileOutlineButton, itemType, buttonProc, &box);
+		GetDItem (dialogPtr, kGetFileOutlineButton, &itemType, (Handle *) &tempControlHdl, &box);
+		SetDItem (dialogPtr, kGetFileOutlineButton, itemType, (Handle) buttonProc, &box);
 		
 		sSFProcFirst = false;			/* clear semphore */
 		

@@ -50,7 +50,7 @@ void 		mouseScroll 		( WindowPtr, ControlHandle, short, Point );
 void		doZoomBox			( WindowPtr, short );
 void		clickZoomWindow		( WindowPtr );
 
-Rect *		makeFrameRect		( WindowPtr, Rect * );
+void		makeFrameRect		( WindowPtr, Rect * );
 void		setFrameClip		( WindowPtr, Rect * );
 
 /* ### kwgm 5.20.90 */

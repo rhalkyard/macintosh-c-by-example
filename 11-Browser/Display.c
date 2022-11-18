@@ -15,6 +15,8 @@
    ***************************************************************************** */
 #include <TextEdit.h>
 
+#include <ThinkHelpers.h>
+
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>
@@ -41,7 +43,7 @@ drawDocContents (theDoc)
 {
 	Rect			frameRect;
 	
-	setFrameClip (theDoc, &frameRect);
+	setFrameClip ((WindowPtr) theDoc, &frameRect);
 	
 	TextFont (theDoc->textFont);
 	TextFace (theDoc->textFace);
@@ -172,7 +174,7 @@ printBrowserHdr (DocPtr theDoc)
 	FontInfo	fInfo;
 	short		vStart;
 
-	SetPort (theDoc);
+	SetPort ((WindowPtr) theDoc);
 	
 	GetFontInfo (&fInfo);
 	vStart = fInfo.ascent + fInfo.descent;
